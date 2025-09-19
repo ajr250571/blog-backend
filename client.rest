@@ -1,11 +1,41 @@
-###
-GET http://127.0.0.1:8000/test/ HTTP/1.1
-
-###
-POST http://127.0.0.1:8000/test/ HTTP/1.1
-content-type: application/json
+### Get categories list
+GET http://127.0.0.1:8000/api/blog/categories/?p=1&page_size=10 HTTP/1.1
+API-Key: HiZ6jkeRB5FCq9Jr72uLiTsd9L2Dbw2aY0rnLY7RUihN4mwZzIs1eB635bxfWd99dFoWsm5KNWUJnT8lGnmDAxKNZrQrJIs7EMJafEI8nOvLoXhbXbJdnJt1XFDzaJej
+### Get category detail
+GET http://127.0.0.1:8000/api/blog/category/?slug=programacion HTTP/1.1
+API-Key: HiZ6jkeRB5FCq9Jr72uLiTsd9L2Dbw2aY0rnLY7RUihN4mwZzIs1eB635bxfWd99dFoWsm5KNWUJnT8lGnmDAxKNZrQrJIs7EMJafEI8nOvLoXhbXbJdnJt1XFDzaJej
+### Get category increment clickss
+POST http://127.0.0.1:8000/api/blog/category/increment_clicks/ HTTP/1.1
+Content-Type: application/json
+API-Key: HiZ6jkeRB5FCq9Jr72uLiTsd9L2Dbw2aY0rnLY7RUihN4mwZzIs1eB635bxfWd99dFoWsm5KNWUJnT8lGnmDAxKNZrQrJIs7EMJafEI8nOvLoXhbXbJdnJt1XFDzaJej
 
 {
-    "name": "sample",
-    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+    "slug": "programacion"
 }
+### Get posts list
+GET http://127.0.0.1:8000/api/blog/posts/?page_size=20&category=programacion HTTP/1.1
+API-Key: HiZ6jkeRB5FCq9Jr72uLiTsd9L2Dbw2aY0rnLY7RUihN4mwZzIs1eB635bxfWd99dFoWsm5KNWUJnT8lGnmDAxKNZrQrJIs7EMJafEI8nOvLoXhbXbJdnJt1XFDzaJej
+
+### Get post detail for slug "programacion"
+GET http://127.0.0.1:8000/api/blog/post/?slug=lead-summer-general HTTP/1.1
+API-Key: HiZ6jkeRB5FCq9Jr72uLiTsd9L2Dbw2aY0rnLY7RUihN4mwZzIs1eB635bxfWd99dFoWsm5KNWUJnT8lGnmDAxKNZrQrJIs7EMJafEI8nOvLoXhbXbJdnJt1XFDzaJej
+
+### Get post headings for slug "programacion"
+GET http://127.0.0.1:8000/api/blog/posts/headings/?slug=lead-summer-general HTTP/1.1
+API-Key: HiZ6jkeRB5FCq9Jr72uLiTsd9L2Dbw2aY0rnLY7RUihN4mwZzIs1eB635bxfWd99dFoWsm5KNWUJnT8lGnmDAxKNZrQrJIs7EMJafEI8nOvLoXhbXbJdnJt1XFDzaJej
+### Get post increment clicls
+POST http://127.0.0.1:8000/api/blog/post/increment_clicks/ HTTP/1.1
+Content-Type: application/json
+API-Key: HiZ6jkeRB5FCq9Jr72uLiTsd9L2Dbw2aY0rnLY7RUihN4mwZzIs1eB635bxfWd99dFoWsm5KNWUJnT8lGnmDAxKNZrQrJIs7EMJafEI8nOvLoXhbXbJdnJt1XFDzaJej
+
+{
+    "slug": "lead-summer-general"
+}
+
+
+
+### Generate fake posts
+GET http://127.0.0.1:8000/api/blog/post/generate_posts/ HTTP/1.1
+
+### Generate fake analytics
+GET http://127.0.0.1:8000/api/blog/post/generate_analytics/ HTTP/1.1

@@ -25,11 +25,12 @@ environ.Env.read_env()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
+VALID_API_KEYS = env.str('VALID_API_KEYS').split(",")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
 # Application definition
@@ -49,11 +50,29 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'rest_framework_api',
     'channels',
+    'ckeditor',
+    'ckeditor_uploader',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
-
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
+# Para subida de archivos (opcional)
+CKEDITOR_UPLOAD_PATH = "media/"
+
+# Configuración de CKEditor
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 400,
+        'width': 900,
+    },
+}
+
+SILENCED_SYSTEM_CHECKS = ['ckeditor.W001']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -125,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'es-es'
+LANGUAGE_CODE = 'es-ar'
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
@@ -150,8 +169,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
+
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.AllowAny',
     ]
 }
 
@@ -163,7 +183,7 @@ CHANNELS_LAYERS = {
         },
     },
 }
-
+REDIS_HOST = env("REDIS_HOST")
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -177,3 +197,29 @@ CACHES = {
 CHANNELLS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+SELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Argentina/Buenos_Aires'
+
+CELERY_BROKER_URL = env("REDIS_URL")
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'visibility_timeout': 3600,
+    'socket_connect_timeout': 30,
+    'socket_timeout': 30,
+    'retry_on_timeout': True,
+}
+
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'default'
+
+CELERY_IMPORTS = ('core.tasks',
+                  'apps.blog.tasks')
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BEAT_SCHEDULE = {}
+
+CACHE_TIMEOUT = 60*5  # Default cache timeout in 5 minutes
+
+MAX_PAGE_SIZE = 100

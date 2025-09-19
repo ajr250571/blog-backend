@@ -10,6 +10,7 @@ services:
       - .:/app
     depends_on:
       - django_redis
+      - django_db
   
   # redis for channels
   django_redis:
@@ -31,3 +32,29 @@ services:
       - "5432:5432"
     volumes:
       - .dbdata:/var/lib/postgresql
+  
+  # celery worker
+  celery_worker:
+    container_name: blog_celery_worker
+    build: .
+    command: celery -A core worker --loglevel=info
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8001"
+    depends_on:
+      - django_redis
+      - django_db
+  
+  # celery beat scheduler
+  celery_beat:
+    container_name: blog_celery_beat
+    build: .
+    command: celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/app
+    ports:
+      - "8002:8002"
+    depends_on:
+      - django_redis
+      - django_db
