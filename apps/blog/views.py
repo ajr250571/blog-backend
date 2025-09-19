@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # redis
 redis_client = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=0)
 # cache timeout
-cache_timeout = settings.CACHE_TIMEOUT  # Cache timeout in seconds
+cache_timeout = settings.CACHE_TIMEOUT
 
 
 class CategoryListView(StandardAPIView):
